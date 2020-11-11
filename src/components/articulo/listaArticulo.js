@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
-import { MiniaturaArticulo } from "./miniaturaArticulo"
+import { MiniaturaArticulo } from "./MiniaturaArticulo"
 import { resp } from "../llamada"
 import { Button, Col, Form } from "react-bootstrap"
 import '../../styles/style.scss'
