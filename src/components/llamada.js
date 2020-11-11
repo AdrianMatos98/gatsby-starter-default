@@ -1,7 +1,7 @@
 import axios from "axios"
 export const resp = async () => {
   try {
-    const resp = await axios.get(`http://localhost:1337/articulos`)
+    const resp = await axios.get(`https://strapi-backend-app.herokuapp.com/articulos`)
     console.log("fetch")
     console.log(resp)
     if (resp.status === 200) {

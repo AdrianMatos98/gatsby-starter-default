@@ -18,7 +18,7 @@ const ListaArticulo = ({ data }) => {
       descripcion: "descripcion 13",
     }
 
-    axios.post(`http://localhost:1337/articulos`, user).then(res => {
+    axios.post(`https://strapi-backend-app.herokuapp.com/articulos`, user).then(res => {
       console.log("posteo")
       console.log(res.data)
       setListaGet(c => [...c, res.data])
