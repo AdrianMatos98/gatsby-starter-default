@@ -5,7 +5,6 @@ module.exports = {
     author: `@gatsbyjs`,
   },
   plugins: [
-    // `gatsby-plugin-sass`,
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -34,6 +33,12 @@ module.exports = {
         apiURL: `https://strapi-backend-app.herokuapp.com`,
         queryLimit: 1000, // Default to 100
         contentTypes: [`articulo`],
+      },
+    },
+    {
+      resolve: `gatsby-plugin-sass`,
+      options: {
+        implementation: require("sass"),
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality

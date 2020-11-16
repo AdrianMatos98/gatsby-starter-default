@@ -2,29 +2,78 @@ import React, { useState, useEffect } from "react"
 import axios from "axios"
 import { MiniaturaArticulo } from "./MiniaturaArticulo"
 import { resp } from "../llamada"
-import { Button, Col, Form } from "react-bootstrap"
-import '../../styles/style.scss'
+import { useForm } from "../../hooks/useForm"
 
 const ListaArticulo = ({ data }) => {
-  const handleChange = event => {
-    this.setState({ name: event.target.value })
-  }
-
   const handleSubmit = event => {
     event.preventDefault()
 
-    const user = {
-      titulo: "titulo 13",
-      descripcion: "descripcion 13",
+    // console.log(values)
+
+    if (update.update) {
+      axios
+        .put(
+          `https://strapi-backend-app.herokuapp.com/articulos/${update.id}`,
+          values
+        )
+        .then(res => {
+          console.log("update")
+          console.log(res.data)
+          setListaGet(c =>
+            c.map(item => {
+              return item.id === update.id
+                ? (item = { ...item, ...values })
+                : item
+            })
+          )
+
+          setUpdate({ id: null, update: false })
+        })
+    } else {
+      axios
+        .post(`https://strapi-backend-app.herokuapp.com/articulos`, values)
+        .then(res => {
+          console.log("posteo")
+          console.log(res.data)
+          setListaGet(c => [...c, res.data])
+        })
     }
 
-    axios.post(`https://strapi-backend-app.herokuapp.com/articulos`, user).then(res => {
-      console.log("posteo")
-      console.log(res.data)
-      setListaGet(c => [...c, res.data])
-    })
+    reset()
   }
+
+  const handleDelete = id => {
+    axios
+      .delete(`https://strapi-backend-app.herokuapp.com/articulos/${id}`)
+      .then(res => {
+        console.log("delete")
+        setListaGet(c =>
+          c.filter(item => {
+            return item.id !== id
+          })
+        )
+      })
+  }
+
+  const handleSetUpdate = id => {
+    const a = { ...listaGet.find(item => item.id === id) }
+    reset({ titulo: a.titulo, descripcion: a.descripcion })
+    setUpdate({ id: id, update: true })
+  }
+
   const [listaGet, setListaGet] = useState([])
+
+  const [update, setUpdate] = useState({
+    id: null,
+    update: false,
+  })
+
+  const [values, handleInputChange, reset] = useForm({
+    titulo: "",
+    descripcion: "",
+  })
+
+  const { titulo, descripcion } = values
 
   useEffect(() => {
     resp().then(resp => {
@@ -33,59 +82,80 @@ const ListaArticulo = ({ data }) => {
   }, [setListaGet])
 
   return (
-    <div>
-      <div>
-        <form onSubmit={handleSubmit}>
-          <Col></Col>
-          <label>
-            Person Name:
-            <input type="text" name="name" onChange={handleChange} />
-          </label>
-          <button type="submit">Add</button>
+    <div className="col listaArticulo">
+      <div className="row">
+        <p>{update.update ? "Actualizando articulo" : "Agregando articulo"}</p>
+        <form className="col-10 mx-auto mt-3" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="forTitulo">Titulo</label>
+            <input
+              type="text"
+              className="form-control"
+              id="forTitulo"
+              placeholder="Titulo"
+              name="titulo"
+              value={titulo}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="formDescripcion">Descripción</label>
+            <textarea
+              className="form-control"
+              id="formDescripcion"
+              placeholder="Descripción"
+              rows="3"
+              name="descripcion"
+              value={descripcion}
+              onChange={handleInputChange}
+            ></textarea>
+          </div>
+
+          <button className="btn btn-primary" type="submit">
+            Enviar
+          </button>
         </form>
-
-        <Form>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control type="email" placeholder="Enter email" />
-            <Form.Text className="text-muted">
-              We'll never share your email with anyone else.
-            </Form.Text>
-          </Form.Group>
-
-          <Form.Group controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="Password" />
-          </Form.Group>
-          <Form.Group controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Check me out" />
-          </Form.Group>
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
-        </Form>
       </div>
-      ListaArticulo
-      {data.allStrapiArticulo.edges.map(({ node }) => (
-        <MiniaturaArticulo
-          key={node.strapiId}
-          titulo={node.titulo}
-          descripcion={node.descripcion}
-        />
-      ))}
-      <div></div>
+
       <div>
-        {listaGet &&
-          listaGet.map(data => (
+        <p>ListaArticulo</p>
+      </div>
+      {/* <div className="row">
+        <div className="col">
+          {data.allStrapiArticulo.edges.map(({ node }) => (
             <MiniaturaArticulo
-              key={data.id}
-              titulo={data.titulo}
-              descripcion={data.descripcion}
+              key={node.strapiId}
+              titulo={node.titulo}
+              descripcion={node.descripcion}
             />
           ))}
+        </div>
+      </div> */}
+
+      <div className="row">
+        <div className="col">
+          {listaGet &&
+            listaGet.map(data => (
+              <MiniaturaArticulo
+                key={data.id}
+                id={data.id}
+                titulo={data.titulo}
+                descripcion={data.descripcion}
+                handleDelete={handleDelete}
+                handleSetUpdate={handleSetUpdate}
+              />
+            ))}
+        </div>
       </div>
     </div>
   )
 }
 
+{
+  /* </div>
+  
+  
+</div> */
+}
 export default ListaArticulo

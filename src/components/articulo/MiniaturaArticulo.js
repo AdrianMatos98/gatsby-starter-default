@@ -1,18 +1,25 @@
-import React, { useState } from "react"
-import { Media, Col } from "react-bootstrap"
+import React from "react"
 
-export const MiniaturaArticulo = ({titulo, descripcion }) => {
-
-    const [listaGet, setListaGet] = useState([])
-
+export const MiniaturaArticulo = ({
+  id,
+  titulo,
+  descripcion,
+  handleDelete,
+  handleSetUpdate,
+}) => {
   return (
-    <Media>
-      <Media.Body>
-        <Col>
-          <p>{titulo}</p>
-          <p>{descripcion}</p>
-        </Col>
-      </Media.Body>
-    </Media>
+    <div className="card mb-2 col-12">
+      {/* <img className="card-img-top" src="..." alt="Card image cap" /> */}
+      <div className="card-body">
+        <h5 className="card-title">{titulo}</h5>
+        <p className="card-text">{descripcion}</p>
+        <button className="btn btn-primary" onClick={() => handleSetUpdate(id)}>
+          update
+        </button>
+        <button className="btn btn-danger ml-2" onClick={() => handleDelete(id)}>
+          Delete
+        </button>
+      </div>
+    </div>
   )
 }

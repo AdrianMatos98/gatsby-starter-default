@@ -1,8 +1,17 @@
 import React from "react"
 import ListaArticulo from "../components/articulo/listaArticulo"
+import Layout from "../components/layout"
 
 const dashboard = ({ data }) => {
-  return <ListaArticulo data={data}/>
+  return (
+    // <Layout>
+    <div className="container">
+      <div className="col-6">
+        <ListaArticulo data={data} className="row-cols-4" />
+      </div>
+    </div>
+    // </Layout>
+  )
 }
 
 export default dashboard

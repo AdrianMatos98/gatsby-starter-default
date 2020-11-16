@@ -6,4 +6,5 @@
 
 // You can delete this file if you're not using it
 // import "./src/styles/style.scss"
-import "bootstrap/dist/css/bootstrap.min.css"
+import "./src/styles/style.scss"
+import "./node_modules/bootstrap/dist/css/bootstrap.css"
